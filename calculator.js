@@ -4,6 +4,7 @@ const btnAC = document.getElementById('AC');
 const btnEqual = document.getElementById('=');
 const btnDel = document.getElementById('Del');
 const allBtns = document.querySelectorAll(".btn");
+let outputDisplayed = false;
 
 // Prevents Text Selection
 document.addEventListener('selectstart', function (e) {
@@ -14,12 +15,23 @@ document.addEventListener('selectstart', function (e) {
 allBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
         if (btn.id !== '=' && btn.id !== 'AC' && btn.id !== 'Del') {
-            input.innerText = input.innerText + btn.innerText;
+            const operators = "+-*/^";
+            if (outputDisplayed) {
+                if (operators.includes(btn.innerText)) {
+                    input.innerText += btn.innerText; // Continue calculation
+                } else {
+                    input.innerText = btn.innerText; // Start new calculation
+                    output.innerText = "";
+                }
+                outputDisplayed = false;
+            } else {
+                input.innerText += btn.innerText;
+            }
         }
     });
 });
 
-// Clears Input And Outpu If AC is pressed
+// Clears Input And Output If AC is pressed
 btnAC.addEventListener("click", () => {
     input.innerText = "";
     output.innerText = "";
@@ -27,32 +39,43 @@ btnAC.addEventListener("click", () => {
 
 // Deletes Last Char Of Input If Del Is Pressed
 btnDel.addEventListener("click", () => {
-    input.innerText = input.innerText.slice(0, -1)
+    input.innerText = input.innerText.slice(0, -1);
 });
 
 // Gives Output/Error If = is pressed
 btnEqual.addEventListener("click", () => {
     try {
-        const expression = input.innerText.replace("^", "**");
+        const expression = input.innerText.replace(/\^/g, "**");
         output.innerText = eval(expression);
-    }
-    catch (e) {
-        alert("Invalid Expression")
+        outputDisplayed = true;
+    } catch (e) {
+        alert("Invalid Expression");
     }
 });
 
-
-// Makes The Calculator Useable By Physical Keyboard
+// Makes The Calculator Usable By Physical Keyboard
 document.addEventListener("keydown", (e) => {
     const key = e.key;
+    const operators = "+-*/.^";
 
-    if (!isNaN(key) || "+-*/.^".includes(key)) {
-        input.innerText += key;
+    if (!isNaN(key) || operators.includes(key)) {
+        if (outputDisplayed) {
+            if (operators.includes(key)) {
+                input.innerText += key;
+            } else {
+                input.innerText = key;
+                output.innerText = "";
+            }
+            outputDisplayed = false;
+        } else {
+            input.innerText += key;
+        }
     }
     else if (key === "Enter" || key === "=") {
         try {
             const expression = input.innerText.replace(/\^/g, "**");
             output.innerText = eval(expression);
+            outputDisplayed = true;
         } catch {
             alert("Invalid Expression");
         }
