@@ -1,6 +1,6 @@
 # 🧮 Calculator – JavaScript Practice Project
 
-## 🔗 For Live Demo <a href="https://abeerlala.github.io/CALCULATOR" target="_blank">Click Here</a>
+## 🔗 For Live Demo <a href="https://abeerlala.github.io/Calculator" target="_blank">Click Here</a>
 
 This is a simple and functional **Calculator** built using **HTML**, **CSS**, and **JavaScript**. I created it as a frontend practice project to strengthen my understanding of DOM manipulation and basic arithmetic logic in JavaScript.
 
